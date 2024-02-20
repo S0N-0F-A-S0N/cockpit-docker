@@ -175,9 +175,12 @@ class Application extends React.Component {
 
     initContainers(system) {
         return client.getContainers(system)
-                .then(containerList => Promise.all(
-                    containerList.map(container => client.inspectContainer(system, container.Id))
-                ))
+                .then(containerList => {
+                    console.log(containerList);
+                    return Promise.all(
+                        containerList.map(container => client.inspectContainer(system, container.Id))
+                    );
+                })
                 .then(containerDetails => {
                     this.setState(prevState => {
                         // keep/copy the containers for !system
@@ -189,14 +192,14 @@ class Application extends React.Component {
                         for (const detail of containerDetails) {
                             detail.isSystem = system;
                             copyContainers[detail.Id] = detail;
+                            this.updateContainerStats(detail.Id, system);
                         }
-
                         return {
                             containers: copyContainers,
                             [system ? "systemContainersLoaded" : "userContainersLoaded"]: true,
                         };
                     });
-                    this.updateContainerStats(system);
+                    // this.updateContainerStats(system);
                 })
                 .catch(console.log);
     }

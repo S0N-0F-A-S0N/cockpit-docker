@@ -347,16 +347,19 @@ class Containers extends React.Component {
             proc = <div><abbr title={_("not available")}>{_("n/a")}</abbr></div>;
             mem = <div><abbr title={_("not available")}>{_("n/a")}</abbr></div>;
         }
-        if (containerStats && container.State === "running") {
-            // console.log(containerStats);
+        if (containerStats && container.State.Status === "running") {
             proc = utils.format_cpu_usage(containerStats);
             mem = utils.format_memory_and_limit(containerStats);
         }
 
+        let containerName = container.Name;
+        if (containerName.startsWith("/")) {
+            containerName = containerName.substring(1);
+        }
         const info_block = (
             <div className="container-block">
                 <Flex alignItems={{ default: 'alignItemsCenter' }}>
-                    <span className="container-name">{container.Name}</span>
+                    <span className="container-name">{containerName}</span>
                     {isToolboxContainer && <Badge className='ct-badge-toolbox'>toolbox</Badge>}
                     {isDistroboxContainer && <Badge className='ct-badge-distrobox'>distrobox</Badge>}
                 </Flex>
