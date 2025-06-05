@@ -5,7 +5,9 @@ containers](https://docker.io/).
 
 ## Technologies
 
- - cockpit-docker communicates to docker through its [REST API](https://docs.docker.com/engine/api/v1.43/).
+ - cockpit-docker communicates to docker through its [REST API](https://docs.docker.com/engine/api/v1.50/). The client
+   detects the daemon's supported API level at runtime to stay compatible with
+   newer Docker releases.
 
  - This project is based on [cockpit-podman](https://github.com/cockpit-project/cockpit-podman), I ported as much as I could to the docker API, but not everything maps (e.g. pods) and not everything is ported yet.
 

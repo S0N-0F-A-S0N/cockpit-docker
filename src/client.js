@@ -1,7 +1,13 @@
 import rest from './rest.js';
 
 const DOCKER_ADDRESS = "/var/run/docker.sock";
-export const VERSION = "/v1.43";
+
+/*
+ * Use the latest known Docker API version as a default. This value gets
+ * overwritten by `getInfo()` at runtime when querying `/version` from the
+ * daemon, keeping the client compatible with newer engines.
+ */
+export let VERSION = "/v1.50";
 
 export function getAddress() {
     return DOCKER_ADDRESS;
@@ -26,6 +32,11 @@ function dockerCall(name, method, args, body) {
 const dockerJson = (name, method, args, body) => dockerCall(name, method, args, body)
         .then(reply => JSON.parse(reply));
 
+function updateVersion(apiVersion) {
+    if (typeof apiVersion === 'string' && apiVersion.trim() !== '')
+        VERSION = "/v" + apiVersion.replace(/^v/, '');
+}
+
 function dockerMonitor(name, method, args, callback) {
     const options = {
         method,
@@ -45,7 +56,11 @@ export const streamEvents = (callback) => dockerMonitor("/events", "GET", {}, ca
 export function getInfo() {
     return new Promise((resolve, reject) => {
         const timeout = setTimeout(() => reject(new Error("timeout")), 15000);
-        dockerJson("/info", "GET", {})
+        dockerJson("/version", "GET", {})
+                .then(version => {
+                    updateVersion(version.ApiVersion);
+                    return dockerJson("/info", "GET", {});
+                })
                 .then(reply => resolve(reply))
                 .catch(reject)
                 .finally(() => clearTimeout(timeout));
