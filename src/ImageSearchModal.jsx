@@ -5,7 +5,6 @@ import { Flex } from "@patternfly/react-core/dist/esm/layouts/Flex";
 import { Form, FormGroup } from "@patternfly/react-core/dist/esm/components/Form";
 import { FormSelect, FormSelectOption } from "@patternfly/react-core/dist/esm/components/FormSelect";
 import { Modal } from "@patternfly/react-core/dist/esm/components/Modal";
-import { Radio } from "@patternfly/react-core/dist/esm/components/Radio";
 import { TextInput } from "@patternfly/react-core/dist/esm/components/TextInput";
 import { ExclamationCircleIcon } from '@patternfly/react-icons';
 

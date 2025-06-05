@@ -47,11 +47,9 @@ const HealthLogBlock = ({ log }) => {
     const toggleExpanded = () => setExpanded(!expanded);
 
     const actions = (
-        <>
-            <CodeBlockAction>
-                <ClipboardCopyButton variant="plain" aria-label={_("Copy to clipboard")} text={log.Output} />
-            </CodeBlockAction>
-        </>
+        <CodeBlockAction>
+            <ClipboardCopyButton variant="plain" aria-label={_("Copy to clipboard")} text={log.Output} />
+        </CodeBlockAction>
     );
 
     let output = log.Output.split("\n");
