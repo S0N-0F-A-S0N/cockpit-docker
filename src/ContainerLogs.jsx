@@ -19,8 +19,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Terminal } from "xterm";
-import { CanvasAddon } from 'xterm-addon-canvas';
+import { Terminal } from "@xterm/xterm";
+import { CanvasAddon } from '@xterm/addon-canvas';
 import { ExclamationCircleIcon } from '@patternfly/react-icons';
 
 import cockpit from 'cockpit';
