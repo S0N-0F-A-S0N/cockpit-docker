@@ -153,9 +153,12 @@ class Application extends React.Component {
 
     initContainers() {
         return client.getContainers()
-                .then(containerList => Promise.all(
-                    containerList.map(container => client.inspectContainer(container.Id))
-                ))
+                .then(containerList => {
+                    console.log(containerList);
+                    return Promise.all(
+                        containerList.map(container => client.inspectContainer(container.Id))
+                    );
+                })
                 .then(containerDetails => {
                     this.setState(prevState => {
                         const copyContainers = prevState.containers || {};
