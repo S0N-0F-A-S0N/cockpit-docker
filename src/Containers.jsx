@@ -49,22 +49,20 @@ const ContainerActions = ({ container, healthcheck, onAddNotification, localImag
                 const id = container ? container.Id : "";
 
                 return client.delContainer(id, true)
-                        .catch(ex => {
-                            const error = cockpit.format(_("Failed to force remove container $0"), container.Name); // not-covered: OS error
-                            onAddNotification({ type: 'danger', error, errorDetail: ex.message });
-                            throw ex;
-                        })
-                        .finally(() => {
-                            Dialogs.close();
-                        });
+                    .catch(ex => {
+                        const error = cockpit.format(_("Failed to force remove container $0"), container.Name); // not-covered: OS error
+                        onAddNotification({ type: 'danger', error, errorDetail: ex.message });
+                        throw ex;
+                    })
+                    .finally(() => { Dialogs.close(); });
             };
 
             Dialogs.show(<ForceRemoveModal name={container.Name}
-                                           handleForceRemove={handleForceRemoveContainer}
-                                           reason={_("Deleting a running container will erase all data in it.")} />);
+                handleForceRemove={handleForceRemoveContainer}
+                reason={_("Deleting a running container will erase all data in it.")} />);
         } else {
             Dialogs.show(<ContainerDeleteModal containerWillDelete={container}
-                                               onAddNotification={onAddNotification} />);
+                onAddNotification={onAddNotification} />);
         }
     };
 
@@ -74,39 +72,39 @@ const ContainerActions = ({ container, healthcheck, onAddNotification, localImag
         if (force)
             args.t = 0;
         client.postContainer("stop", container.Id, args)
-                .catch(ex => {
-                    const error = cockpit.format(_("Failed to stop container $0"), container.Name); // not-covered: OS error
-                    onAddNotification({ type: 'danger', error, errorDetail: ex.message });
-                });
+            .catch(ex => {
+                const error = cockpit.format(_("Failed to stop container $0"), container.Name); // not-covered: OS error
+                onAddNotification({ type: 'danger', error, errorDetail: ex.message });
+            });
     };
 
     const startContainer = () => {
         client.postContainer("start", container.Id, {})
-                .catch(ex => {
-                    const error = cockpit.format(_("Failed to start container $0"), container.Name); // not-covered: OS error
-                    onAddNotification({ type: 'danger', error, errorDetail: ex.message });
-                });
+            .catch(ex => {
+                const error = cockpit.format(_("Failed to start container $0"), container.Name); // not-covered: OS error
+                onAddNotification({ type: 'danger', error, errorDetail: ex.message });
+            });
     };
 
     const resumeContainer = () => {
         client.postContainer("unpause", container.Id, {})
-                .catch(ex => {
-                    const error = cockpit.format(_("Failed to resume container $0"), container.Name); // not-covered: OS error
-                    onAddNotification({ type: 'danger', error, errorDetail: ex.message });
-                });
+            .catch(ex => {
+                const error = cockpit.format(_("Failed to resume container $0"), container.Name); // not-covered: OS error
+                onAddNotification({ type: 'danger', error, errorDetail: ex.message });
+            });
     };
 
     const pauseContainer = () => {
         client.postContainer("pause", container.Id, {})
-                .catch(ex => {
-                    const error = cockpit.format(_("Failed to pause container $0"), container.Name); // not-covered: OS error
-                    onAddNotification({ type: 'danger', error, errorDetail: ex.message });
-                });
+            .catch(ex => {
+                const error = cockpit.format(_("Failed to pause container $0"), container.Name); // not-covered: OS error
+                onAddNotification({ type: 'danger', error, errorDetail: ex.message });
+            });
     };
 
     const commitContainer = () => {
         Dialogs.show(<ContainerCommitModal container={container}
-                                           localImages={localImages} />);
+            localImages={localImages} />);
     };
 
     const restartContainer = (force) => {
@@ -125,7 +123,7 @@ const ContainerActions = ({ container, healthcheck, onAddNotification, localImag
         if (container.State.Status !== "running" ||
             version.localeCompare("3.0.1", undefined, { numeric: true, sensitivity: 'base' }) >= 0) {
             Dialogs.show(<ContainerRenameModal container={container}
-                                               updateContainer={updateContainer} />);
+                updateContainer={updateContainer} />);
         }
     };
 
@@ -141,35 +139,29 @@ const ContainerActions = ({ container, healthcheck, onAddNotification, localImag
     const actions = [];
     if (isRunning || isPaused || isRestarting) {
         actions.push(
-            <DropdownItem key="stop"
-                          onClick={() => stopContainer()}>
+            <DropdownItem key="stop" onClick={() => stopContainer()}>
                 {_("Stop")}
             </DropdownItem>,
-            <DropdownItem key="force-stop"
-                          onClick={() => stopContainer(true)}>
+            <DropdownItem key="force-stop" onClick={() => stopContainer(true)}>
                 {_("Force stop")}
             </DropdownItem>,
-            <DropdownItem key="restart"
-                          onClick={() => restartContainer()}>
+            <DropdownItem key="restart" onClick={() => restartContainer()}>
                 {_("Restart")}
             </DropdownItem>,
-            <DropdownItem key="force-restart"
-                          onClick={() => restartContainer(true)}>
+            <DropdownItem key="force-restart" onClick={() => restartContainer(true)}>
                 {_("Force restart")}
             </DropdownItem>
         );
 
         if (!isPaused) {
             actions.push(
-                <DropdownItem key="pause"
-                          onClick={() => pauseContainer()}>
+                <DropdownItem key="pause" onClick={() => pauseContainer()}>
                     {_("Pause")}
                 </DropdownItem>
             );
         } else {
             actions.push(
-                <DropdownItem key="resume"
-                          onClick={() => resumeContainer()}>
+                <DropdownItem key="resume" onClick={() => resumeContainer()}>
                     {_("Resume")}
                 </DropdownItem>
             );
@@ -178,8 +170,7 @@ const ContainerActions = ({ container, healthcheck, onAddNotification, localImag
 
     if (!isRunning && !isPaused) {
         actions.push(
-            <DropdownItem key="start"
-                          onClick={() => startContainer()}>
+            <DropdownItem key="start" onClick={() => startContainer()}>
                 {_("Start")}
             </DropdownItem>
         );
@@ -197,7 +188,7 @@ const ContainerActions = ({ container, healthcheck, onAddNotification, localImag
     actions.push(<Divider key="separator-1" />);
     actions.push(
         <DropdownItem key="commit"
-                      onClick={() => commitContainer()}>
+          onClick={() => commitContainer()}>
             {_("Commit")}
         </DropdownItem>
     );
@@ -205,8 +196,8 @@ const ContainerActions = ({ container, healthcheck, onAddNotification, localImag
     actions.push(<Divider key="separator-2" />);
     actions.push(
         <DropdownItem key="delete"
-                      className="pf-m-danger"
-                      onClick={deleteContainer}>
+          className="pf-m-danger"
+          onClick={deleteContainer}>
             {_("Delete")}
         </DropdownItem>
     );
@@ -215,37 +206,29 @@ const ContainerActions = ({ container, healthcheck, onAddNotification, localImag
 };
 
 export let onDownloadContainer = function funcOnDownloadContainer(container) {
-    this.setState(prevState => ({
-        downloadingContainers: [...prevState.downloadingContainers, container]
-    }));
+    this.setState(prevState => ({ downloadingContainers: [...prevState.downloadingContainers, container] }));
 };
 
 export let onDownloadContainerFinished = function funcOnDownloadContainerFinished(container) {
-    this.setState(prevState => ({
-        downloadingContainers: prevState.downloadingContainers.filter(entry => entry.name !== container.name),
-    }));
+    this.setState(prevState => ({ downloadingContainers: prevState.downloadingContainers.filter(entry => entry.name !== container.name), }));
 };
 
 const localize_health = (state) => {
-    if (state === "healthy")
-        return _("Healthy");
-    else if (state === "unhealthy")
-        return _("Unhealthy");
-    else if (state === "starting")
-        return _("Checking health");
-    else
-        console.error("Unexpected health check status", state);
+    if (state === "healthy") return _("Healthy");
+    else if (state === "unhealthy") return _("Unhealthy");
+    else if (state === "starting") return _("Checking health");
+    else console.error("Unexpected health check status", state);
     return null;
 };
 
 const ContainerOverActions = ({ handlePruneUnusedContainers, unusedContainers }) => {
     const actions = [
         <DropdownItem key="prune-unused-containers"
-                            id="prune-unused-containers-button"
-                            component="button"
-                            className="pf-m-danger btn-delete"
-                            onClick={() => handlePruneUnusedContainers()}
-                            isDisabled={unusedContainers.length === 0}>
+          id="prune-unused-containers-button"
+          component="button"
+          className="pf-m-danger btn-delete"
+          onClick={() => handlePruneUnusedContainers()}
+          isDisabled={unusedContainers.length === 0}>
             {_("Prune unused containers")}
         </DropdownItem>,
     ];
@@ -274,13 +257,9 @@ class Containers extends React.Component {
         window.addEventListener('resize', this.onWindowResize);
     }
 
-    componentDidMount() {
-        this.onWindowResize();
-    }
+    componentDidMount() { this.onWindowResize(); }
 
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.onWindowResize);
-    }
+    componentWillUnmount() { window.removeEventListener('resize', this.onWindowResize); }
 
     renderRow(containersStats, container, localImages) {
         const containerStats = containersStats[container.Id];
@@ -311,8 +290,7 @@ class Containers extends React.Component {
         }
 
         let containerName = container.Name;
-        if (containerName?.startsWith("/"))
-            containerName = containerName.substring(1);
+        if (containerName?.startsWith("/")) { containerName = containerName.substring(1); }
 
         const info_block = (
             <div className="container-block">
@@ -335,8 +313,7 @@ class Containers extends React.Component {
         const state = [<Badge key={containerState} isRead className={containerStateClass}>{_(containerState)}</Badge>]; // States are defined in util.js
         if (healthcheck) {
             localized_health = localize_health(healthcheck);
-            if (localized_health)
-                state.push(<Badge key={healthcheck} isRead className={"ct-badge-container-" + healthcheck}>{localized_health}</Badge>);
+            if (localized_health) state.push(<Badge key={healthcheck} isRead className={"ct-badge-container-" + healthcheck}>{localized_health}</Badge>);
         }
 
         const columns = [
@@ -406,13 +383,9 @@ class Containers extends React.Component {
         };
     }
 
-    onWindowResize() {
-        this.setState({ width: this.cardRef.current.clientWidth });
-    }
+    onWindowResize() { this.setState({ width: this.cardRef.current.clientWidth }); }
 
-    onOpenPruneUnusedContainersDialog = () => {
-        this.setState({ showPruneUnusedContainersModal: true });
-    };
+    onOpenPruneUnusedContainersDialog = () => { this.setState({ showPruneUnusedContainersModal: true }); };
 
     render() {
         const Dialogs = this.context;
@@ -447,10 +420,8 @@ class Containers extends React.Component {
                 const a_health = getHealth(a);
                 const b_health = getHealth(b);
                 if (a_health !== b_health) {
-                    if (a_health === "unhealthy")
-                        return -1;
-                    if (b_health === "unhealthy")
-                        return 1;
+                    if (a_health === "unhealthy") return -1;
+                    if (b_health === "unhealthy") return 1;
                 }
                 return this.props.containers[a].Name > this.props.containers[b].Name ? 1 : -1;
             });
@@ -459,8 +430,7 @@ class Containers extends React.Component {
             for (const containerid of Object.keys(this.props.containers)) {
                 const container = this.props.containers[containerid];
                 // Ignore pods and running containers
-                if (!prune_states.includes(container.State))
-                    continue;
+                if (!prune_states.includes(container.State)) continue;
 
                 unusedContainers.push({
                     id: container.Id,
@@ -492,11 +462,11 @@ class Containers extends React.Component {
                             <DialogsContext.Consumer>
                                 {(Dialogs) => (
                                     <ImageRunModal user={this.props.user}
-                                                              localImages={nonIntermediateImages}
-                                                              serviceAvailable={this.props.serviceAvailable}
-                                                              onAddNotification={this.props.onAddNotification}
-                                                              dockerInfo={dockerInfo}
-                                                              dialogs={Dialogs} />
+                                      localImages={nonIntermediateImages}
+                                      serviceAvailable={this.props.serviceAvailable}
+                                      onAddNotification={this.props.onAddNotification}
+                                      dockerInfo={dockerInfo}
+                                      dialogs={Dialogs} />
                                 )}
                             </DialogsContext.Consumer>
                         )}
@@ -518,9 +488,9 @@ class Containers extends React.Component {
                     <Divider orientation={{ default: "vertical" }} />
                     <ToolbarItem>
                         <Button variant="primary" key="get-new-image-action"
-                                id="containers-containers-create-container-btn"
-                                isDisabled={nonIntermediateImages === null}
-                                onClick={() => createContainer(null)}>
+                          id="containers-containers-create-container-btn"
+                          isDisabled={nonIntermediateImages === null}
+                          onClick={() => createContainer(null)}>
                             {_("Create container")}
                         </Button>
                     </ToolbarItem>
@@ -546,11 +516,8 @@ class Containers extends React.Component {
                     aitem = stateOrderMapping[aitem];
                     bitem = stateOrderMapping[bitem];
                 }
-                if (isNumeric) {
-                    return bitem - aitem;
-                } else {
-                    return aitem.localeCompare(bitem);
-                }
+                if (isNumeric) { return bitem - aitem; }
+                else { return aitem.localeCompare(bitem); }
             });
             return direction === SortByDirection.asc ? sortedRows : sortedRows.reverse();
         };
@@ -564,19 +531,19 @@ class Containers extends React.Component {
                     <Flex direction={{ default: 'column' }}>
                         {(this.props.containers === null)
                             ? <ListingTable variant='compact'
-                                            aria-label={_("Containers")}
-                                            emptyCaption={emptyCaption}
-                                            columns={columnTitles}
-                                            sortMethod={sortRows}
-                                            rows={[]}
-                                            sortBy={{ index: 0, direction: SortByDirection.asc }} />
+                                aria-label={_("Containers")}
+                                emptyCaption={emptyCaption}
+                                columns={columnTitles}
+                                sortMethod={sortRows}
+                                rows={[]}
+                                sortBy={{ index: 0, direction: SortByDirection.asc }} />
                             : <Card key="table-containers"
-                                             id="table-containers"
-                                             isPlain
-                                             // isFlat={section != "no-pod"}
-                                             className="container-pod"
-                                             isClickable
-                                             isSelectable>
+                                id="table-containers"
+                                isPlain
+                                // isFlat={section != "no-pod"}
+                                className="container-pod"
+                                isClickable
+                                isSelectable>
                                 {/* {caption && <CardHeader actions={{ actions, className: "panel-actions" }}> */}
                                 {/*    <CardTitle> */}
                                 {/*        <Flex justifyContent={{ default: 'justifyContentFlexStart' }}> */}
@@ -586,14 +553,13 @@ class Containers extends React.Component {
                                 {/*    </CardTitle> */}
                                 {/* </CardHeader>} */}
                                 <ListingTable variant='compact'
-                                                          emptyCaption={emptyCaption}
-                                                          columns={columnTitles}
-                                                          sortMethod={sortRows}
-                                                          rows={filtered.map(container => {
-                                                              return this.renderRow(this.props.containersStats, this.props.containers[container],
-                                                                                    localImages);
-                                                          })}
-                                                          aria-label={_("Containers")} />
+                                  emptyCaption={emptyCaption}
+                                  columns={columnTitles}
+                                  sortMethod={sortRows}
+                                  rows={filtered.map(container => {
+                                    return this.renderRow(this.props.containersStats, this.props.containers[container], localImages);
+                                  })}
+                                  aria-label={_("Containers")} />
                             </Card>
                         }
                     </Flex>
