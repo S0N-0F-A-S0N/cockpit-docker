@@ -1,8 +1,8 @@
-@use "ct-card.scss";
-@use "page.scss";
+@use "ct-card";
+@use "page";
 @import "global-variables";
 // For pf-v5-line-clamp
-@import "@patternfly/patternfly/sass-utilities/mixins.scss";
+@import "@patternfly/patternfly/sass-utilities/mixins";
 // For pf-u-disabled-color-100
 @import "@patternfly/patternfly/utilities/Text/text.css";
 
