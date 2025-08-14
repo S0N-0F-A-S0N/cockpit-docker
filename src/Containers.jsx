@@ -310,10 +310,15 @@ class Containers extends React.Component {
             [mem_text, mem] = utils.format_memory_and_limit(containerStats);
         }
 
+        let containerName = container.Name;
+        if (containerName.startsWith("/")) {
+            containerName = containerName.substring(1);
+        }
+
         const info_block = (
             <div className="container-block">
                 <Flex alignItems={{ default: 'alignItemsCenter' }}>
-                    <span className="container-name">{container.Name}</span>
+                    <span className="container-name">{containerName}</span>
                     {isToolboxContainer && <Badge className='ct-badge-toolbox'>toolbox</Badge>}
                     {isDistroboxContainer && <Badge className='ct-badge-distrobox'>distrobox</Badge>}
                 </Flex>
